@@ -1,6 +1,8 @@
 package GUI;
 
+import Entities.Cargo;
 import Entities.Usuario;
+import Services.CargoService;
 import Services.UsuarioService;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -10,6 +12,12 @@ public class CreateUsuario extends javax.swing.JPanel {
 
     public CreateUsuario() {
         initComponents();
+        initData();
+    }
+    
+    private void initData(){
+        generarCodigo();
+        cargarCargos();
     }
 
     /**
@@ -210,11 +218,11 @@ public class CreateUsuario extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(spnFechaContra)
                     .addComponent(tfdpssContra, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(34, 34, 34))
+                .addGap(24, 24, 24))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -245,12 +253,12 @@ public class CreateUsuario extends javax.swing.JPanel {
         // 01. VALIDAR el formulario.
         if (!validarFormulario()) return;
         // 02. CREAR usuario para agregar a la Base de Datos.
-        
+        CargoService cargoS = new CargoService();
         Date date = (Date) spnFechaContra.getValue();
         LocalDate fecha = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         
         Usuario user = new Usuario(
-            1,
+            cargoS.getIdCargo(cbxCargo.getSelectedItem().toString()),
             tfdNombre.getText(),
             tfdApellido.getText(),
             tfdDni.getText(),
@@ -260,12 +268,40 @@ public class CreateUsuario extends javax.swing.JPanel {
         );
         // 03. ENVIAR al usuario a la Base de Datos.
         UsuarioService userS = new UsuarioService();
-        userS.agregar(user);
+        if (userS.agregar(user)){
+            limpiarCampos();
+        }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
-
+    // TODO: Agregar una función para validar correctamente.
+    // MÉTODOS
     private boolean validarFormulario(){
         return true;
+    }
+    
+    private void limpiarCampos(){
+        tfdNombre.setText("");
+        tfdApellido.setText("");
+        tfdDni.setText("");
+        tfdEmail.setText("");
+        tfdpssContra.setText("");
+        cbxCargo.setSelectedIndex(0);
+        generarCodigo();
+    }
+    
+    private void generarCodigo(){
+        UsuarioService userS = new UsuarioService();
+        int code = userS.getCode();
+        tfdCodUsuario.setText(String.valueOf(code));
+    }
+    
+    private void cargarCargos(){
+        cbxCargo.removeAllItems();
+        
+        CargoService cargoS = new CargoService();
+        for (Cargo cargo : cargoS.listar()) {
+            cbxCargo.addItem(cargo.getNombre());
+        }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

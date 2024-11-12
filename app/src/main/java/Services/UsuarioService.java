@@ -107,4 +107,25 @@ public class UsuarioService implements ICRUD<Usuario>{
     public List<Usuario> listar() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+    
+    public int getCode(){
+        String sql = "SELECT MAX(idUsuario)+1 AS Codigo FROM Usuarios;";
+        
+        try {
+            cn = Conexion.getMySQL();
+            
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            
+            if (rs.next()){
+                return rs.getInt(1);
+            }else{
+                return 0;
+            }
+        } catch (SQLException e) {
+            dialog.showAlert(500, e);
+        }
+        
+        return 0;
+    }
 }

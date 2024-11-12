@@ -13,13 +13,15 @@ public class CargoService implements ICRUD<Cargo>{
     DialogAlert dialog = new DialogAlert("Cargo");
     Connection cn = null;
     
+    public CargoService(){
+        cn = Conexion.getMySQL();   
+    }
+    
     @Override
     public boolean agregar(Cargo entity) {
         String sql = "INSERT INTO Cargos(nombre, descripcion) VALUES (?,?);";
         
         try {
-            cn = Conexion.getMySQL();    
-            
             PreparedStatement ps = cn.prepareStatement(sql);
             ps.setString(1, entity.getNombre());
             ps.setString(2, entity.getDescripcion());
@@ -94,6 +96,8 @@ public class CargoService implements ICRUD<Cargo>{
         List<Cargo> cargos = new ArrayList<>();
         
         try {
+            cn = Conexion.getMySQL();
+            
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(sql);
             
@@ -117,5 +121,23 @@ public class CargoService implements ICRUD<Cargo>{
         }
         
         return cargos;
+    }
+    
+    public int getIdCargo(String nombreCargo){
+        String sql = "SELECT idCargo FROM Cargos WHERE nombre=?;";
+        
+        try {
+            PreparedStatement ps = cn.prepareStatement(sql);
+            ps.setString(1, nombreCargo);
+            
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                return rs.getInt(1);
+            }else{
+                return 0;
+            }
+        } catch (SQLException e) {
+            return 0;
+        }
     }
 }
