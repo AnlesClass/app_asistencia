@@ -6,11 +6,13 @@ import Services.CargoService;
 import Services.UsuarioService;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Date;
-// TODO: Borrar esta pestaña, era solo para pruebas.
-public class CreateUsuario extends javax.swing.JPanel {
 
-    public CreateUsuario() {
+public class DCrearUsuario extends javax.swing.JDialog {
+
+    public DCrearUsuario(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
         initData();
     }
@@ -30,24 +32,27 @@ public class CreateUsuario extends javax.swing.JPanel {
     private void initComponents() {
 
         lblTitle = new javax.swing.JLabel();
-        cbxCargo = new javax.swing.JComboBox<>();
         lblNombre = new javax.swing.JLabel();
         tfdNombre = new javax.swing.JTextField();
-        tfdApellido = new javax.swing.JTextField();
         lblApellido = new javax.swing.JLabel();
+        tfdApellido = new javax.swing.JTextField();
         lblDni = new javax.swing.JLabel();
         tfdDni = new javax.swing.JTextField();
-        tfdCodUsuario = new javax.swing.JTextField();
-        lblCodUsuario = new javax.swing.JLabel();
-        lblContra = new javax.swing.JLabel();
-        tfdpssContra = new javax.swing.JPasswordField();
-        lblCargo = new javax.swing.JLabel();
         lblEmail = new javax.swing.JLabel();
         tfdEmail = new javax.swing.JTextField();
-        btnAgregar = new javax.swing.JButton();
-        btnCancelar = new javax.swing.JButton();
-        spnFechaContra = new javax.swing.JSpinner();
+        lblCargo = new javax.swing.JLabel();
+        cbxCargo = new javax.swing.JComboBox<>();
+        lblCodUsuario = new javax.swing.JLabel();
+        tfdCodUsuario = new javax.swing.JTextField();
+        lblContra = new javax.swing.JLabel();
+        tfdpssContra = new javax.swing.JPasswordField();
         lblFechaContra = new javax.swing.JLabel();
+        spnFechaContra = new javax.swing.JSpinner();
+        btnCancelar = new javax.swing.JButton();
+        btnAgregar = new javax.swing.JButton();
+        lblDniError = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         lblTitle.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.focusedBorderColor"));
         lblTitle.setFont(new java.awt.Font("Cascadia Code", 1, 18)); // NOI18N
@@ -56,21 +61,17 @@ public class CreateUsuario extends javax.swing.JPanel {
         lblTitle.setText("REGISTRO DE NUEVO USUARIO");
         lblTitle.setOpaque(true);
 
-        cbxCargo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        cbxCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Denegado>" }));
-        cbxCargo.setToolTipText("Seleccione un Cargo");
-
         lblNombre.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblNombre.setText("Nombre(s)");
 
         tfdNombre.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tfdNombre.setToolTipText("Ingresar Nombre");
 
-        tfdApellido.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        tfdApellido.setToolTipText("Ingresar Apellido");
-
         lblApellido.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblApellido.setText("Apellido(s)");
+
+        tfdApellido.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tfdApellido.setToolTipText("Ingresar Apellido");
 
         lblDni.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblDni.setText("DNI");
@@ -88,33 +89,39 @@ public class CreateUsuario extends javax.swing.JPanel {
             }
         });
 
+        lblEmail.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblEmail.setText("E-mail");
+
+        tfdEmail.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tfdEmail.setToolTipText("Ingresar Email");
+
+        lblCargo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblCargo.setText("Cargo");
+
+        cbxCargo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        cbxCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Denegado>" }));
+        cbxCargo.setToolTipText("Seleccione un Cargo");
+
+        lblCodUsuario.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblCodUsuario.setText("COD-Usuario");
+
         tfdCodUsuario.setEditable(false);
         tfdCodUsuario.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tfdCodUsuario.setText("<Codigo Autegenerado>");
         tfdCodUsuario.setToolTipText("Su código de Usuario");
-
-        lblCodUsuario.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lblCodUsuario.setText("COD-Usuario");
 
         lblContra.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblContra.setText("Contraseña");
 
         tfdpssContra.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tfdpssContra.setToolTipText("Contraseña");
-        tfdpssContra.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfdpssContraActionPerformed(evt);
-            }
-        });
 
-        lblCargo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lblCargo.setText("Cargo");
+        lblFechaContra.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblFechaContra.setText("Fecha de Contratación");
 
-        lblEmail.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lblEmail.setText("E-mail");
+        spnFechaContra.setModel(new javax.swing.SpinnerDateModel());
 
-        tfdEmail.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        tfdEmail.setToolTipText("Ingresar Email");
+        btnCancelar.setText("Cancelar Registro");
 
         btnAgregar.setText("Agregar Usuario");
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
@@ -123,57 +130,54 @@ public class CreateUsuario extends javax.swing.JPanel {
             }
         });
 
-        btnCancelar.setText("Cancelar Registro");
+        lblDniError.setText(" ");
 
-        spnFechaContra.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), new java.util.Date(), null, java.util.Calendar.DAY_OF_MONTH));
-
-        lblFechaContra.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lblFechaContra.setText("Fecha de Contratación");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblNombre)
-                                    .addComponent(tfdNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblDni))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(tfdDni))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(lblApellido)
-                                .addComponent(tfdApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(lblEmail)
-                                .addComponent(tfdEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblTitle, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(lblNombre)
+                                        .addComponent(tfdNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(lblDni))
+                                    .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(tfdDni))
+                            .addGap(18, 18, 18)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(tfdpssContra, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(lblCargo, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(cbxCargo, javax.swing.GroupLayout.Alignment.LEADING, 0, 180, Short.MAX_VALUE))
-                            .addComponent(lblContra))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblFechaContra)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(lblCodUsuario)
-                                .addComponent(tfdCodUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-                                .addComponent(spnFechaContra, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))))
-                .addContainerGap(20, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblApellido)
+                                    .addComponent(tfdApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(lblEmail)
+                                    .addComponent(tfdEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblTitle, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(tfdpssContra, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblCargo, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cbxCargo, javax.swing.GroupLayout.Alignment.LEADING, 0, 180, Short.MAX_VALUE))
+                                .addComponent(lblContra))
+                            .addGap(18, 18, 18)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(lblFechaContra)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(lblCodUsuario)
+                                    .addComponent(tfdCodUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                                    .addComponent(spnFechaContra, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))))
+                    .addComponent(lblDniError, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -200,7 +204,9 @@ public class CreateUsuario extends javax.swing.JPanel {
                         .addComponent(lblEmail)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(tfdEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblDniError)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblCargo)
@@ -217,18 +223,25 @@ public class CreateUsuario extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(spnFechaContra)
-                    .addComponent(tfdpssContra, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE))
-                .addGap(28, 28, 28)
+                    .addComponent(tfdpssContra, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24))
         );
+
+        pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tfdpssContraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfdpssContraActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tfdpssContraActionPerformed
+    private void tfdDniFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfdDniFocusLost
+        // LIMITAR a 8 caracteres cuando se deja de enfocar.
+        String text = tfdDni.getText();
+
+        if (text.length() > 8){
+            tfdDni.setText(text.substring(0,8));
+        }
+    }//GEN-LAST:event_tfdDniFocusLost
 
     private void tfdDniKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfdDniKeyTyped
         // LIMITAR a 8 caracteres cuando se está escribiendo.
@@ -240,15 +253,6 @@ public class CreateUsuario extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_tfdDniKeyTyped
 
-    private void tfdDniFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfdDniFocusLost
-        // LIMITAR a 8 caracteres cuando se deja de enfocar.
-        String text = tfdDni.getText();
-        
-        if (text.length() > 8){
-            tfdDni.setText(text.substring(0,8));
-        }
-    }//GEN-LAST:event_tfdDniFocusLost
-
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // 01. VALIDAR el formulario.
         if (!validarFormulario()) return;
@@ -256,14 +260,14 @@ public class CreateUsuario extends javax.swing.JPanel {
         CargoService cargoS = new CargoService();
         Date date = (Date) spnFechaContra.getValue();
         LocalDate fecha = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        
+
         Usuario user = new Usuario(
             cargoS.getIdCargo(cbxCargo.getSelectedItem().toString()),
             tfdNombre.getText(),
             tfdApellido.getText(),
             tfdDni.getText(),
             tfdEmail.getText(),
-            tfdpssContra.getToolTipText(),
+            Arrays.toString(tfdpssContra.getPassword()),
             fecha
         );
         // 03. ENVIAR al usuario a la Base de Datos.
@@ -276,6 +280,9 @@ public class CreateUsuario extends javax.swing.JPanel {
     // TODO: Agregar una función para validar correctamente.
     // MÉTODOS
     private boolean validarFormulario(){
+        // 01. VALIDAR longitud exacta de DNI.
+        lblDniError.setText((tfdDni.getText().length() < 8) ? "Este campo debe contener 8 caracteres." : " ");
+        
         return true;
     }
     
@@ -304,6 +311,50 @@ public class CreateUsuario extends javax.swing.JPanel {
         }
     }
     
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(DCrearUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(DCrearUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(DCrearUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(DCrearUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the dialog */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                // new javax.swing.JFrame()
+                DCrearUsuario dialog = new DCrearUsuario(null, true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
+            }
+        });
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnCancelar;
@@ -313,6 +364,7 @@ public class CreateUsuario extends javax.swing.JPanel {
     private javax.swing.JLabel lblCodUsuario;
     private javax.swing.JLabel lblContra;
     private javax.swing.JLabel lblDni;
+    private javax.swing.JLabel lblDniError;
     private javax.swing.JLabel lblEmail;
     private javax.swing.JLabel lblFechaContra;
     private javax.swing.JLabel lblNombre;

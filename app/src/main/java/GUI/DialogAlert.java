@@ -67,4 +67,8 @@ public class DialogAlert {
     public void genericDialog(String message, int type){
         JOptionPane.showMessageDialog(null, message, "Mensaje de " + campo.toUpperCase(), type);
     }
+    
+    public static void genericDialog(String content, String title, int type){
+        JOptionPane.showMessageDialog(null, content, title, type);
+    }
 }

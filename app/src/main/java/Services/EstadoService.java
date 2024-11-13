@@ -5,6 +5,7 @@ import Entities.Estado;
 import GUI.DialogAlert;
 import Interfaces.ICRUD;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EstadoService implements ICRUD<Estado>{
@@ -89,6 +90,34 @@ public class EstadoService implements ICRUD<Estado>{
 
     @Override
     public List<Estado> listar() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sql = "SELECT * FROM Estados;";
+        List<Estado> estados = new ArrayList<>();
+        
+        try {
+            cn = Conexion.getMySQL();
+            
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            
+            while(rs.next()){
+                Estado estado = new Estado(
+                    rs.getInt(1), 
+                    rs.getString(2), 
+                    rs.getString(3)
+                );
+                estados.add(estado);
+            }
+            
+            // MOSTRAR DIALOGOS
+            if (estados.size() < 1){
+                dialog.genericDialog("¡No se hallaron resultados!", 1);
+            }
+            
+            return estados;
+        } catch (SQLException e) {
+            dialog.showAlert(500, e);
+        }
+        
+        return estados;
     }
 }

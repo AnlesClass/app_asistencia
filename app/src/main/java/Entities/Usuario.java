@@ -27,4 +27,19 @@ public class Usuario {
         this.contrasenia = contrasenia;
         this.fechaContrato = fechaContrato;
     }
+    
+    public String[] toArray(){
+        String[] usuario = {
+            String.valueOf(idUsuario),
+            String.valueOf(idCargo),
+            nombre,
+            apellido,
+            dni,
+            email,
+            contrasenia,
+            String.valueOf(fechaContrato)
+        };
+        
+        return usuario;
+    }
 }

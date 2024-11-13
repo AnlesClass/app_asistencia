@@ -1,9 +1,11 @@
 package app.asistencia;
 
 import GUI.CreateUsuario;
+import GUI.Home;
 import com.formdev.flatlaf.FlatLightLaf;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 public class App {
     public String getGreeting() {
@@ -14,15 +16,11 @@ public class App {
         System.out.println(new App().getGreeting());
         try {
             UIManager.setLookAndFeel( new FlatLightLaf());
-        } catch( Exception ex ) {
+            Home home = new Home();
+            home.setLocationRelativeTo(null);
+            home.setVisible(true);
+        } catch( UnsupportedLookAndFeelException ex ) {
             System.err.println( "Failed to initialize LaF" );
         }
-        JFrame main = new JFrame();
-        CreateUsuario add = new CreateUsuario();
-        main.add(add);
-        main.setLocationRelativeTo(null);
-        main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        main.pack();
-        main.setVisible(true);
     }
 }

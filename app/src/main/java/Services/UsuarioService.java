@@ -5,6 +5,7 @@ import Entities.Usuario;
 import GUI.DialogAlert;
 import Interfaces.ICRUD;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UsuarioService implements ICRUD<Usuario>{
@@ -49,7 +50,9 @@ public class UsuarioService implements ICRUD<Usuario>{
     public boolean modificar(Usuario entity) {
         String sql = "UPDATE Usuarios SET idCargo=?, nombre=?, apellido=?, dni=?, email=?, contrasenia=?, fechaContrato=? WHERE idUsuario=?;";
         
-        try {    
+        try {
+            cn = Conexion.getMySQL(); 
+            
             PreparedStatement ps = cn.prepareStatement(sql);
             ps.setInt(1, entity.getIdCargo());
             ps.setString(2, entity.getNombre());
@@ -78,11 +81,12 @@ public class UsuarioService implements ICRUD<Usuario>{
         String sql = "SELECT * FROM Usuarios WHERE idUsuario=" + String.valueOf(id) + ";";
         
         try {
+            cn = Conexion.getMySQL(); 
+            
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(sql);
             
             if (rs.next()){
-                dialog.showAlert(200);
                 return new Usuario(
                     rs.getInt(1),
                     rs.getInt(2),
@@ -93,8 +97,6 @@ public class UsuarioService implements ICRUD<Usuario>{
                     rs.getString(7),
                     rs.getDate(8).toLocalDate()
                 );
-            } else {
-                dialog.showAlert(500);
             }
         } catch (SQLException ex) {
             dialog.showAlert(500);
@@ -105,7 +107,40 @@ public class UsuarioService implements ICRUD<Usuario>{
 
     @Override
     public List<Usuario> listar() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sql = "SELECT * FROM Usuarios;";
+        List<Usuario> usuarios = new ArrayList<>();
+        
+        try {
+            cn = Conexion.getMySQL();
+            
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            
+            while(rs.next()){
+                Usuario usuario = new Usuario(
+                    rs.getInt(1), 
+                    rs.getInt(2), 
+                    rs.getString(3),
+                    rs.getString(4),
+                    rs.getString(5),
+                    rs.getString(6),
+                    rs.getString(7),
+                    rs.getDate(8).toLocalDate()
+                );
+                usuarios.add(usuario);
+            }
+            
+            // MOSTRAR DIALOGOS
+            if (usuarios.size() < 1){
+                dialog.genericDialog("¡No se hallaron resultados!", 1);
+            }
+            
+            return usuarios;
+        } catch (SQLException e) {
+            dialog.showAlert(500, e);
+        }
+        
+        return usuarios;
     }
     
     public int getCode(){
