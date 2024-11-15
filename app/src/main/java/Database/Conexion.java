@@ -8,8 +8,8 @@ public class Conexion {
     
     //TODO: Cambiar, porque estos son valores para Test.
     final static String URL = "jdbc:mysql://localhost:3306/bd_gestor_asistencia";
-    final static String USER = "root";
-    final static String PASS = "1234";
+    final static String USER = "app-asistencia";
+    final static String PASS = "123456";
     
     public static Connection getMySQL(){
         
