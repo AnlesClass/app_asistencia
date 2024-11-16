@@ -267,7 +267,7 @@ public class DCrearUsuario extends javax.swing.JDialog {
             tfdApellido.getText(),
             tfdDni.getText(),
             tfdEmail.getText(),
-            Arrays.toString(tfdpssContra.getPassword()),
+            new String(tfdpssContra.getPassword()),
             fecha
         );
         // 03. ENVIAR al usuario a la Base de Datos.

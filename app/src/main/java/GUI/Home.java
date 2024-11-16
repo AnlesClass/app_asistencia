@@ -179,8 +179,13 @@ public class Home extends javax.swing.JFrame {
 
     private void miRegistrarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miRegistrarEntradaActionPerformed
         if (tblUsuarios.getSelectedRow() != -1){
+            // OBTENER ID del Usuario.
             int idRow = tblUsuarios.getSelectedRow();
             int idUsuario = Integer.parseInt(dtmUsuario.getValueAt(idRow, 0).toString());
+            // COMPROBAR que el ID tenga posible asistencia para hoy.
+            UsuarioService userS = new UsuarioService();
+            if (userS.getEntrada(idUsuario) == null) return;
+            // ABRIR el Dialog correspondiente.
             DRegistroAsistencia registrarEntrada = new DRegistroAsistencia(this, true, idUsuario);
             registrarEntrada.setLocationRelativeTo(this);
             registrarEntrada.setVisible(true);

@@ -5,6 +5,7 @@ import Entities.Usuario;
 import GUI.DialogAlert;
 import Interfaces.ICRUD;
 import java.sql.*;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -162,5 +163,33 @@ public class UsuarioService implements ICRUD<Usuario>{
         }
         
         return 0;
+    }
+    
+    public LocalTime getEntrada(int idUsuario){
+        String sql = "CALL getEntrada(?,?);";
+        LocalTime tiempoDiferencia;
+        
+        try {
+            cn = Conexion.getMySQL();
+            
+            CallableStatement cs = cn.prepareCall(sql);
+            cs.setInt(1, idUsuario);
+            cs.registerOutParameter(2, java.sql.Types.TIME);
+            
+            cs.execute();
+            
+            String res = cs.getString(2);
+            
+            if (res != null){
+                tiempoDiferencia = LocalTime.parse(res.replace("-", ""));
+                return tiempoDiferencia;
+            }else{
+                DialogAlert.genericDialog("¡No se Encontró Registro de Asistencia para Hoy!", "SIN REGISTRO EN BASE DE DATOS : 404", 1);
+                return null;
+            }
+        } catch (SQLException e) {
+            DialogAlert.genericDialog("¡Error al Consultar Diferencia de Horas!", "ERROR AL CONSULTAR", 1);
+        }
+        return null;
     }
 }

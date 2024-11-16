@@ -6,6 +6,7 @@ import Entities.Usuario;
 import Services.AsistenciaService;
 import Services.EstadoService;
 import Services.UsuarioService;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
@@ -19,17 +20,16 @@ public class DRegistroAsistencia extends javax.swing.JDialog {
     public DRegistroAsistencia(java.awt.Frame parent, boolean modal, int idUsuario) {
         super(parent, modal);
         initComponents();
-        
-        //CONFIGURAR entradas en tiempo real.
+        initData(idUsuario);
+    }
+    
+    private void initData(int idUsuario){
+        //OBTENER datos del usuario.
         UsuarioService userS = new UsuarioService();
         usuario = userS.leer(idUsuario);
         fechaRegistro = LocalDate.now();
         horaRegistro = LocalTime.now().withSecond(0).withNano(0);
-                
-        initData();
-    }
-    
-    private void initData(){
+        
         //01. CARGAR código de usuario.
         tfdCodigoUsuario.setText(String.valueOf(usuario.getIdUsuario()));
         //02. CARGAR nombre y apellido de usuario.
@@ -50,7 +50,15 @@ public class DRegistroAsistencia extends javax.swing.JDialog {
         for(Estado estado : estadoS.listar()){
             cbxEstado.addItem(estado.getNombre());
         }
-        // B. Seleccionar Estado 
+        // TODO: Esta parte está por mejorar.
+        // B. Seleccionar Estado
+        LocalTime diffTime = userS.getEntrada(idUsuario);
+        LocalTime maxTime = LocalTime.of(0, 10);
+        Duration result = Duration.between(diffTime, maxTime);
+        if (result.isNegative()){
+            cbxEstado.setSelectedIndex(2);
+            System.out.println("Somare, son más de 10 mins.");
+        }
     }
 
     /**
