@@ -1,9 +1,7 @@
 package app.asistencia;
 
-import GUI.CreateUsuario;
 import GUI.Home;
 import com.formdev.flatlaf.FlatLightLaf;
-import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 

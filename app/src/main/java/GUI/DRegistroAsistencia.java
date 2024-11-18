@@ -17,13 +17,13 @@ public class DRegistroAsistencia extends javax.swing.JDialog {
     LocalDate fechaRegistro;
     LocalTime horaRegistro;
     
-    public DRegistroAsistencia(java.awt.Frame parent, boolean modal, int idUsuario) {
+    public DRegistroAsistencia(java.awt.Frame parent, boolean modal, int idUsuario, int tipoRegistro) {
         super(parent, modal);
         initComponents();
-        initData(idUsuario);
+        initData(idUsuario, tipoRegistro);
     }
     
-    private void initData(int idUsuario){
+    private void initData(int idUsuario, int tipoRegistro){
         //OBTENER datos del usuario.
         UsuarioService userS = new UsuarioService();
         usuario = userS.leer(idUsuario);
@@ -59,6 +59,8 @@ public class DRegistroAsistencia extends javax.swing.JDialog {
             cbxEstado.setSelectedIndex(2);
             System.out.println("Somare, son más de 10 mins.");
         }
+        // 05. Cargar el tipo de registro.
+        cbxTipoRegistro.setSelectedIndex(tipoRegistro);
     }
 
     /**
@@ -130,6 +132,11 @@ public class DRegistroAsistencia extends javax.swing.JDialog {
         lblContra.setText("Contraseña");
 
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         btnRegistrar.setText("Registrar");
         btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
@@ -241,19 +248,52 @@ public class DRegistroAsistencia extends javax.swing.JDialog {
             DialogAlert.genericDialog("Contraseña no coincide.", "CONTRASEÑA ERRÓNEA", 2);
             return;
         }
-        
-        Asistencia asistencia = new Asistencia(
-            Integer.parseInt(tfdCodigoUsuario.getText()),
-            fechaRegistro,
-            horaRegistro,
-            horaRegistro,
-            1
-        );
+        // CREAR servicios para las consultas.
         AsistenciaService asistenciaS = new AsistenciaService();
-        if (asistenciaS.agregar(asistencia)){
-            this.dispose();
+        EstadoService estadoS = new EstadoService();
+        Asistencia asistencia;
+        
+        // OBTENER la asistencia marcada hoy.
+        asistencia = asistenciaS.getTodayAsistencia(usuario.getIdUsuario());
+        // EJECUTAR si no hay asistencia.
+        if (asistencia == null){
+            // VALIDAR que no se quiera registrar salida primero.
+            if (cbxTipoRegistro.getSelectedIndex() == 1){
+                DialogAlert.genericDialog("¡No Hay Registro de Entrada!\nRegistre primero la entrada para registrar una salida.", "NO SE PUDO REGISTRAR", 2);
+                return;
+            }
+            
+            // CREAR Entidad Asistencia para agregar a la BD.
+            asistencia = new Asistencia(
+                Integer.parseInt(tfdCodigoUsuario.getText()),
+                fechaRegistro,
+                horaRegistro,
+                null,
+                estadoS.getIdEstado(cbxEstado.getSelectedItem().toString())
+            );
+            if (asistenciaS.agregar(asistencia)){
+                this.dispose();
+            }
+        // EJECUTAR si hay asistencia marcada hoy.
+        } else {
+            // VALIDAR que no se quiera registrar salida primero.
+            if (cbxTipoRegistro.getSelectedIndex() == 0){
+                DialogAlert.genericDialog("¡Ya existe un registro de entrada!\nRegistre su salida ahora por favor..", "NO SE PUDO REGISTRAR", 2);
+                return;
+            }
+            
+            // MODIFICAR y ACTUALIZAR la asistencia (hora salida) en la BD.
+            asistencia.setHoraSalida(horaRegistro);
+            
+            if (asistenciaS.modificar(asistencia)){
+                this.dispose();
+            }
         }
     }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;

@@ -3,6 +3,9 @@ package GUI;
 import Entities.Usuario;
 import Services.UsuarioService;
 import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 public class Home extends javax.swing.JFrame {
@@ -34,6 +37,20 @@ public class Home extends javax.swing.JFrame {
             dtmUsuario.addRow(userArray);
         }
     }
+    
+    private void recargarTabla(List<Usuario> usuarios){
+        dtmUsuario.setRowCount(0);
+        
+        for(Usuario usuario : usuarios){
+            String[] userArray = {
+                String.valueOf(usuario.getIdUsuario()),
+                usuario.getNombre(),
+                usuario.getApellido(),
+                usuario.getDni()
+            };
+            dtmUsuario.addRow(userArray);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -46,6 +63,7 @@ public class Home extends javax.swing.JFrame {
 
         popOpciones = new javax.swing.JPopupMenu();
         miRegistrarEntrada = new javax.swing.JMenuItem();
+        miRegistrarSalida = new javax.swing.JMenuItem();
         lblBuscar = new javax.swing.JLabel();
         tfdBuscar = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
@@ -61,6 +79,14 @@ public class Home extends javax.swing.JFrame {
         });
         popOpciones.add(miRegistrarEntrada);
 
+        miRegistrarSalida.setText("Registrar Salida");
+        miRegistrarSalida.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miRegistrarSalidaActionPerformed(evt);
+            }
+        });
+        popOpciones.add(miRegistrarSalida);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         lblBuscar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -75,6 +101,11 @@ public class Home extends javax.swing.JFrame {
             }
             public void focusLost(java.awt.event.FocusEvent evt) {
                 tfdBuscarFocusLost(evt);
+            }
+        });
+        tfdBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfdBuscarKeyTyped(evt);
             }
         });
 
@@ -111,7 +142,6 @@ public class Home extends javax.swing.JFrame {
         tblUsuarios.setComponentPopupMenu(popOpciones);
         tblUsuarios.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         tblUsuarios.setShowGrid(true);
-        tblUsuarios.setShowHorizontalLines(true);
         scrollUsuarios.setViewportView(tblUsuarios);
         tblUsuarios.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (tblUsuarios.getColumnModel().getColumnCount() > 0) {
@@ -174,10 +204,37 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_tfdBuscarFocusLost
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        //TODO: Añadir función de búsqueda.
+        UsuarioService userS = new UsuarioService();
+        String nombreConsulta;
+        
+        if (tfdBuscar.getText().equals("Ingrese nombre de usuario...")){
+            nombreConsulta = "";
+        } else {
+            nombreConsulta = tfdBuscar.getText();
+        }
+        
+        recargarTabla(userS.filtrarNombre(nombreConsulta));
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void miRegistrarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miRegistrarEntradaActionPerformed
+        abrirRegistroAsistencia(0);
+    }//GEN-LAST:event_miRegistrarEntradaActionPerformed
+
+    private void tfdBuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfdBuscarKeyTyped
+        // No realizar consulta de menos de 3 caracteres.
+        if (tfdBuscar.getText().length() >= 3){
+            UsuarioService userS = new UsuarioService();
+            recargarTabla(userS.filtrarNombre(tfdBuscar.getText()));
+        } else if (tfdBuscar.getText().length() == 0){
+            recargarTabla();
+        }
+    }//GEN-LAST:event_tfdBuscarKeyTyped
+
+    private void miRegistrarSalidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miRegistrarSalidaActionPerformed
+        abrirRegistroAsistencia(1);
+    }//GEN-LAST:event_miRegistrarSalidaActionPerformed
+
+    private void abrirRegistroAsistencia(int tipoRegistro){
         if (tblUsuarios.getSelectedRow() != -1){
             // OBTENER ID del Usuario.
             int idRow = tblUsuarios.getSelectedRow();
@@ -186,19 +243,20 @@ public class Home extends javax.swing.JFrame {
             UsuarioService userS = new UsuarioService();
             if (userS.getEntrada(idUsuario) == null) return;
             // ABRIR el Dialog correspondiente.
-            DRegistroAsistencia registrarEntrada = new DRegistroAsistencia(this, true, idUsuario);
+            DRegistroAsistencia registrarEntrada = new DRegistroAsistencia(this, true, idUsuario, tipoRegistro);
             registrarEntrada.setLocationRelativeTo(this);
             registrarEntrada.setVisible(true);
         } else {
             DialogAlert.genericDialog("No hay filas seleccionadas.", "SIN FILAS SELECCIONADAS", 2);
         }
-    }//GEN-LAST:event_miRegistrarEntradaActionPerformed
-
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JLabel lblBuscar;
     private javax.swing.JLabel lblCoincidencias;
     private javax.swing.JMenuItem miRegistrarEntrada;
+    private javax.swing.JMenuItem miRegistrarSalida;
     private javax.swing.JPopupMenu popOpciones;
     private javax.swing.JScrollPane scrollUsuarios;
     private javax.swing.JTable tblUsuarios;

@@ -120,4 +120,26 @@ public class EstadoService implements ICRUD<Estado>{
         
         return estados;
     }
+    
+    public int getIdEstado(String nombreEstado){
+        String sql = "SELECT idEstado FROM Estados WHERE nombre=?;";
+        
+        try {
+            cn = Conexion.getMySQL();
+            
+            PreparedStatement ps = cn.prepareStatement(sql);
+            ps.setString(1, nombreEstado);
+            
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()){
+                return rs.getInt(1);
+            } else {
+                dialog.showAlert(400);
+            }
+        } catch (SQLException e) {
+            dialog.showAlert(400, e);
+        }
+        return 0;
+    };
 }

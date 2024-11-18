@@ -18,15 +18,15 @@ public class DialogAlert {
         switch (resultCode) {
             case 200:
                 message = "Éxito al realizar la operación. (OK)";
-                typeMessage = 0;
+                typeMessage = JOptionPane.INFORMATION_MESSAGE;
                 break;
             case 202:
                 message = "Éxito al crear: " + campo;
-                typeMessage = 1;
+                typeMessage = JOptionPane.INFORMATION_MESSAGE;
                 break;
             case 500:
                 message = "Error al crear: " + campo;
-                typeMessage = 2;
+                typeMessage = JOptionPane.WARNING_MESSAGE;
                 break;
             default:
                 break;
@@ -42,23 +42,19 @@ public class DialogAlert {
         int typeMessage = 0;
         
         switch (resultCode) {
-            case 200:
-                message = "Éxito al realizar la operación. (OK)";
-                typeMessage = 0;
-                break;
-            case 202:
-                message = "Éxito al crear: " + campo;
-                typeMessage = 1;
+            case 400:
+                message = "Error al realizar consulta.";
+                typeMessage = JOptionPane.WARNING_MESSAGE;
                 break;
             case 500:
                 message = "Error al crear: " + campo;
-                typeMessage = 2;
+                typeMessage = JOptionPane.ERROR_MESSAGE;
                 break;
             default:
                 break;
         }
         
-        message += "\n ERROR: " + err.getMessage();
+        message += "\nERROR: " + err.getMessage();
         
         // 2. MOSTRAR los mensajes en pantalla.
         JOptionPane.showMessageDialog(null, message, campo, typeMessage);

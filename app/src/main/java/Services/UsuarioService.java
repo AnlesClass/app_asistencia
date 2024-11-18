@@ -192,4 +192,39 @@ public class UsuarioService implements ICRUD<Usuario>{
         }
         return null;
     }
+    
+    public List<Usuario> filtrarNombre(String nombre){
+        String sql = "SELECT * FROM Usuarios WHERE nombre LIKE ?;";
+        ArrayList<Usuario> usuarios = new ArrayList<>();
+        
+        try {
+            cn = Conexion.getMySQL();
+            
+            PreparedStatement ps = cn.prepareStatement(sql);
+            ps.setString(1, nombre + "%");
+            
+            System.out.println(ps);
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()){
+                Usuario usuario = new Usuario(
+                    rs.getInt(1),
+                    rs.getInt(2),
+                    rs.getString(3),
+                    rs.getString(4),
+                    rs.getString(5),
+                    rs.getString(6),
+                    rs.getString(7),
+                    rs.getDate(8).toLocalDate()
+                );
+                usuarios.add(usuario);
+            }
+            
+            return usuarios;
+        } catch (SQLException e) {
+            dialog.showAlert(400, e);
+        }
+        
+        return null;
+    }
 }
