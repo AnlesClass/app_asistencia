@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Estado {
-    int idEstado;
-    String nombre;
-    String abreviatura;
+    private int idEstado;
+    private String nombre;
+    private String abreviatura;
     
     public Estado(String nombre, String abreviatura){
         this.nombre = nombre;

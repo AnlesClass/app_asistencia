@@ -9,10 +9,10 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Turno {
-    int idTurno;
-    String nombre;
-    LocalTime horaInicio;
-    LocalTime horaFin;
+    private int idTurno;
+    private String nombre;
+    private LocalTime horaInicio;
+    private LocalTime horaFin;
 
     public Turno(String nombre, LocalTime horaInicio, LocalTime horaFin) {
         this.nombre = nombre;

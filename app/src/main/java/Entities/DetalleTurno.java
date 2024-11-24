@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DetalleTurno {
-    int idDetalleTurno;
-    int idUsuario;
-    int idTurno;
-    String dia;
+    private int idDetalleTurno;
+    private int idUsuario;
+    private int idTurno;
+    private String dia;
 
     public DetalleTurno(int idUsuario, int idTurno, String dia) {
         this.idUsuario = idUsuario;

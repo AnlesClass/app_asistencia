@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class Asistencia {
-    int idAsistencia;
-    int idUsuario;
-    LocalDate fecha;
-    LocalTime horaEntrada;
-    LocalTime horaSalida;
-    int idEstado;
+    private int idAsistencia;
+    private int idUsuario;
+    private LocalDate fecha;
+    private LocalTime horaEntrada;
+    private LocalTime horaSalida;
+    private int idEstado;
 
     public Asistencia(int idUsuario, LocalDate fecha, LocalTime horaEntrada, LocalTime horaSalida, int idEstado) {
         this.idUsuario = idUsuario;
@@ -24,4 +24,5 @@ public class Asistencia {
         this.horaSalida = horaSalida;
         this.idEstado = idEstado;
     }
+    
 }
