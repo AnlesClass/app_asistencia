@@ -203,7 +203,6 @@ public class UsuarioService implements ICRUD<Usuario>{
             PreparedStatement ps = cn.prepareStatement(sql);
             ps.setString(1, nombre + "%");
             
-            System.out.println(ps);
             ResultSet rs = ps.executeQuery();
             
             while(rs.next()){
