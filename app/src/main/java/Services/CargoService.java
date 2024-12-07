@@ -19,6 +19,7 @@ public class CargoService implements ICRUD<Cargo>{
     
     @Override
     public boolean agregar(Cargo entity) {
+        boolean esAgragado = false;
         String sql = "INSERT INTO Cargos(nombre, descripcion) VALUES (?,?);";
         
         try {
@@ -31,16 +32,16 @@ public class CargoService implements ICRUD<Cargo>{
             // MOSTRAR dialogo.
             if (result == 1){
                 dialog.showAlert(202);
-                return true;
+                esAgragado =  true;
             } else {
                 dialog.showAlert(500);
-                return false;
+                esAgragado = false;
             }
         } catch (SQLException e) {
             dialog.showAlert(500);
         }
         
-        return false;
+        return esAgragado;
     }
 
     @Override
@@ -115,7 +116,6 @@ public class CargoService implements ICRUD<Cargo>{
                 dialog.genericDialog("¡No se hallaron resultados!", 1);
             }
             
-            return cargos;
         } catch (SQLException e) {
             dialog.showAlert(500, e);
         }
@@ -140,4 +140,9 @@ public class CargoService implements ICRUD<Cargo>{
             return 0;
         }
     }
+    
+    public boolean existeCargo(String nombre, String decripcion){
+        List<Cargo> lista = this.listar();
+        return lista.stream().anyMatch( c -> c.getNombre().equalsIgnoreCase(nombre) && c.getDescripcion().equalsIgnoreCase(decripcion));
+    } 
 }

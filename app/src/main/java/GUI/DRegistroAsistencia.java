@@ -255,7 +255,8 @@ public class DRegistroAsistencia extends javax.swing.JDialog {
         
         // OBTENER la asistencia marcada hoy.
         asistencia = asistenciaS.getTodayAsistencia(usuario.getIdUsuario());
-        // EJECUTAR si no hay asistencia.
+        // EJECUTAR si no hay asistencia registrada (Entrada o Salida).
+        System.out.println(asistencia);
         if (asistencia == null){
             // VALIDAR que no se quiera registrar salida primero.
             if (cbxTipoRegistro.getSelectedIndex() == 1){

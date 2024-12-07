@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Cargo {
-    int idCargo;
-    String nombre;
-    String descripcion;
+    private int idCargo;
+    private String nombre;
+    private String descripcion;
 
     public Cargo(String nombre, String descripcion) {
         this.nombre = nombre;

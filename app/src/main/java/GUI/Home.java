@@ -70,6 +70,10 @@ public class Home extends javax.swing.JFrame {
         scrollUsuarios = new javax.swing.JScrollPane();
         tblUsuarios = new javax.swing.JTable();
         lblCoincidencias = new javax.swing.JLabel();
+        mnbrOperaciones = new javax.swing.JMenuBar();
+        mnUsuario = new javax.swing.JMenu();
+        mniAdd = new javax.swing.JMenuItem();
+        mnAsistencia = new javax.swing.JMenu();
 
         miRegistrarEntrada.setText("Registrar Entrada");
         miRegistrarEntrada.addActionListener(new java.awt.event.ActionListener() {
@@ -152,6 +156,23 @@ public class Home extends javax.swing.JFrame {
         lblCoincidencias.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         lblCoincidencias.setText("Coincidencias de Búsqueda");
 
+        mnUsuario.setText("Usuario");
+
+        mniAdd.setText("Crear");
+        mniAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniAddActionPerformed(evt);
+            }
+        });
+        mnUsuario.add(mniAdd);
+
+        mnbrOperaciones.add(mnUsuario);
+
+        mnAsistencia.setText("Asistencia");
+        mnbrOperaciones.add(mnAsistencia);
+
+        setJMenuBar(mnbrOperaciones);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -182,8 +203,8 @@ public class Home extends javax.swing.JFrame {
                         .addGap(3, 3, 3)))
                 .addComponent(lblCoincidencias)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(scrollUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30))
+                .addComponent(scrollUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29))
         );
 
         pack();
@@ -234,6 +255,10 @@ public class Home extends javax.swing.JFrame {
         abrirRegistroAsistencia(1);
     }//GEN-LAST:event_miRegistrarSalidaActionPerformed
 
+    private void mniAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniAddActionPerformed
+        abrirRegistroUsuario();
+    }//GEN-LAST:event_mniAddActionPerformed
+
     private void abrirRegistroAsistencia(int tipoRegistro){
         if (tblUsuarios.getSelectedRow() != -1){
             // OBTENER ID del Usuario.
@@ -251,12 +276,23 @@ public class Home extends javax.swing.JFrame {
         }
     }
     
+    private void abrirRegistroUsuario(){
+        DCrearUsuario registrarUsuario = new DCrearUsuario(this, true);
+        registrarUsuario.setLocationRelativeTo(this);
+        registrarUsuario.setVisible(true);
+    }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JLabel lblBuscar;
     private javax.swing.JLabel lblCoincidencias;
     private javax.swing.JMenuItem miRegistrarEntrada;
     private javax.swing.JMenuItem miRegistrarSalida;
+    private javax.swing.JMenu mnAsistencia;
+    private javax.swing.JMenu mnUsuario;
+    private javax.swing.JMenuBar mnbrOperaciones;
+    private javax.swing.JMenuItem mniAdd;
     private javax.swing.JPopupMenu popOpciones;
     private javax.swing.JScrollPane scrollUsuarios;
     private javax.swing.JTable tblUsuarios;
