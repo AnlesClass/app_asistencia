@@ -6,7 +6,6 @@ import Services.CargoService;
 import Services.UsuarioService;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Arrays;
 import java.util.Date;
 
 public class DRegistrarUsuario extends javax.swing.JDialog {
@@ -122,6 +121,11 @@ public class DRegistrarUsuario extends javax.swing.JDialog {
         spnFechaContra.setModel(new javax.swing.SpinnerDateModel());
 
         btnCancelar.setText("Cancelar Registro");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         btnAgregar.setText("Agregar Usuario");
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
@@ -274,8 +278,13 @@ public class DRegistrarUsuario extends javax.swing.JDialog {
         UsuarioService userS = new UsuarioService();
         if (userS.agregar(user)){
             limpiarCampos();
+            dispose();
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     // TODO: Agregar una función para validar correctamente.
     // MÉTODOS

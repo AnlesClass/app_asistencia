@@ -1,11 +1,15 @@
 package GUI;
 
+import Entities.DetalleTurno;
 import Entities.Dia;
 import Entities.Turno;
 import Entities.Usuario;
+import Services.DetalleTurnoService;
 import Services.DiaService;
+import Services.DialogAlert;
 import Services.TurnoService;
 import Services.UsuarioService;
+import java.util.HashMap;
 import javax.swing.DefaultListModel;
 
 public class DRegistrarDetalleTurno extends javax.swing.JDialog {
@@ -13,7 +17,12 @@ public class DRegistrarDetalleTurno extends javax.swing.JDialog {
     DiaService diaS = new DiaService();
     UsuarioService usuarioS = new UsuarioService();
     TurnoService turnoS = new TurnoService();
+    DetalleTurnoService detalleTurnoS = new DetalleTurnoService();
     DefaultListModel<String> dlmDias = new DefaultListModel<>();
+    
+    HashMap<String, Integer> diasMap = new HashMap<>();
+    HashMap<String, Integer> usuariosMap = new HashMap<>();
+    HashMap<String, Integer> turnosMap = new HashMap<>();
     
     public DRegistrarDetalleTurno(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -56,12 +65,27 @@ public class DRegistrarDetalleTurno extends javax.swing.JDialog {
         lblTermina.setText("Termina: 17:00");
 
         cbxTurnos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Sin Datos>" }));
+        cbxTurnos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxTurnosActionPerformed(evt);
+            }
+        });
 
         cbxUsuarios.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Sin Datos>" }));
 
         btnRegistrar.setText("Registrar");
+        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarActionPerformed(evt);
+            }
+        });
 
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         listDias.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "<Sin Datos>" };
@@ -130,24 +154,65 @@ public class DRegistrarDetalleTurno extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        DetalleTurno detalleTurno = new DetalleTurno(
+            usuariosMap.get(cbxUsuarios.getSelectedItem().toString()),
+            turnosMap.get(cbxTurnos.getSelectedItem().toString()),
+            diasMap.get(listDias.getSelectedValue())
+        );
+        
+        if (detalleTurnoS.agregar(detalleTurno)){
+            DialogAlert.genericDialog("¡Registro exitoso!", "REGISTRADO", 1);
+        } else {
+            DialogAlert.genericDialog("¡FALLO AL REGISTRAR!", "ERROR", 2);
+        }
+    }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void cbxTurnosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxTurnosActionPerformed
+        int item = cbxTurnos.getSelectedIndex();
+        
+        switch (item) {
+            case 0:
+                lblInicio.setText("Inicio: 08:00");
+                lblTermina.setText("Termina: 17:00");
+                break;
+            case 1:
+                lblInicio.setText("Inicio: 12:00");
+                lblTermina.setText("Termina: 20:00");
+                break;
+            case 2:
+                lblInicio.setText("Inicio: 16:00");
+                lblTermina.setText("Termina: 23:59");
+                break;
+        }
+    }//GEN-LAST:event_cbxTurnosActionPerformed
+
     private void initData(){        
         // CARGAR días de la semana.
         dlmDias.clear();
         for(Dia dia : diaS.listar()){
             dlmDias.addElement(dia.getNombre());
+            diasMap.put(dia.getNombre(), dia.getIdDia());
         }
         listDias.setModel(dlmDias);
         
         // CARGAR usuarios.
         cbxUsuarios.removeAllItems();
         for(Usuario usuario : usuarioS.listar()){
-            cbxUsuarios.addItem(usuario.getDni() + " - " + usuario.getNombre() + " " + usuario.getApellido());
+            String nombre = usuario.getDni() + " - " + usuario.getNombre() + " " + usuario.getApellido();
+            cbxUsuarios.addItem(nombre);
+            usuariosMap.put(nombre, usuario.getIdUsuario());
         }
         
         // CARGAR turnos.
         cbxTurnos.removeAllItems();
         for(Turno turno : turnoS.listar()){
             cbxTurnos.addItem(turno.getNombre());
+            turnosMap.put(turno.getNombre(), turno.getIdTurno());
         }
     }
     

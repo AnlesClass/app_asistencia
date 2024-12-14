@@ -229,7 +229,7 @@ public class UsuarioService implements ICRUD<Usuario> {
         return null;
     }
 
-    public List<Usuario> filtrarNombre(String nombre) {
+    public List<Usuario> filtrarUsuarios(String nombre) {
         String sql = "SELECT * FROM Usuarios WHERE nombre LIKE ?;";
         ArrayList<Usuario> usuarios = new ArrayList<>();
 
@@ -238,6 +238,44 @@ public class UsuarioService implements ICRUD<Usuario> {
 
             PreparedStatement ps = cn.prepareStatement(sql);
             ps.setString(1, nombre + "%");
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Usuario usuario = new Usuario(
+                        rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getDate(8).toLocalDate()
+                );
+                usuarios.add(usuario);
+            }
+
+            return usuarios;
+        } catch (SQLException e) {
+            dialog.showAlert(400, e);
+        }
+        return null;
+    }
+    
+    public List<Usuario> filtrarUsuarios(String nombre, String dia) {
+        String sql = "SELECT u.* FROM Usuarios u "
+                + "INNER JOIN detalleTurnos d ON u.idUsuario=d.idUsuario "
+                + "INNER JOIN dias ds ON d.idDia=ds.idDia "
+                + "WHERE u.nombre LIKE ? "
+                + "AND ds.nombre=?;";
+        ArrayList<Usuario> usuarios = new ArrayList<>();
+
+        try {
+            cn = Conexion.getMySQL();
+
+            PreparedStatement ps = cn.prepareStatement(sql);
+            ps.setString(1, nombre + "%");
+            ps.setString(2, dia);
 
             ResultSet rs = ps.executeQuery();
 

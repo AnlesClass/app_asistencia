@@ -70,6 +70,7 @@ public class Home extends javax.swing.JFrame {
         lblCoincidencias = new javax.swing.JLabel();
         scrollUsuarios = new javax.swing.JScrollPane();
         tblUsuarios = new javax.swing.JTable();
+        cbxFiltroDia = new javax.swing.JComboBox<>();
         mnbrOperaciones = new javax.swing.JMenuBar();
         mnUsuario = new javax.swing.JMenu();
         mniUsuarioAdmin = new javax.swing.JMenuItem();
@@ -162,6 +163,8 @@ public class Home extends javax.swing.JFrame {
             tblUsuarios.getColumnModel().getColumn(3).setMaxWidth(300);
         }
 
+        cbxFiltroDia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" }));
+
         javax.swing.GroupLayout pnlRegistrarAsistenciaLayout = new javax.swing.GroupLayout(pnlRegistrarAsistencia);
         pnlRegistrarAsistencia.setLayout(pnlRegistrarAsistenciaLayout);
         pnlRegistrarAsistenciaLayout.setHorizontalGroup(
@@ -173,6 +176,8 @@ public class Home extends javax.swing.JFrame {
                     .addGroup(pnlRegistrarAsistenciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(pnlRegistrarAsistenciaLayout.createSequentialGroup()
                             .addComponent(tfdBuscar)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(cbxFiltroDia, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(lblCoincidencias)
@@ -187,7 +192,8 @@ public class Home extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlRegistrarAsistenciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfdBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbxFiltroDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblCoincidencias)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -242,15 +248,19 @@ public class Home extends javax.swing.JFrame {
         } else {
             nombreConsulta = tfdBuscar.getText();
         }
-
-        recargarTabla(userS.filtrarNombre(nombreConsulta));
+        
+        if(cbxFiltroDia.getSelectedItem().toString().equals("Todo")){
+            recargarTabla(userS.filtrarUsuarios(nombreConsulta)); 
+        } else {
+            recargarTabla(userS.filtrarUsuarios(nombreConsulta, cbxFiltroDia.getSelectedItem().toString()));        
+        }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void tfdBuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfdBuscarKeyTyped
         // No realizar consulta de menos de 3 caracteres.
         if (tfdBuscar.getText().length() >= 3){
             UsuarioService userS = new UsuarioService();
-            recargarTabla(userS.filtrarNombre(tfdBuscar.getText()));
+            recargarTabla(userS.filtrarUsuarios(tfdBuscar.getText()));
         } else if (tfdBuscar.getText().length() == 0){
             recargarTabla();
         }
@@ -295,6 +305,7 @@ public class Home extends javax.swing.JFrame {
             JMenuItem usuarioAdd = new JMenuItem("Añadir");
             usuarioAdd.addActionListener((e) -> {
                 abrirRegistroUsuario();
+                recargarTabla();
             });
             mnUsuario.add(usuarioAdd);
             
@@ -346,6 +357,7 @@ public class Home extends javax.swing.JFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JComboBox<String> cbxFiltroDia;
     private javax.swing.JLabel lblBuscar;
     private javax.swing.JLabel lblCoincidencias;
     private javax.swing.JMenuItem miRegistrarEntrada;

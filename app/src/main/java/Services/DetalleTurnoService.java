@@ -13,7 +13,7 @@ public class DetalleTurnoService implements ICRUD<DetalleTurno>{
     
     @Override
     public boolean agregar(DetalleTurno entity) {
-        String sql = "INSERT INTO DetalleTurnos(idUsuario, idTurno, dia) VALUES (?,?,?);";
+        String sql = "INSERT INTO DetalleTurnos(idUsuario, idTurno, idDia) VALUES (?,?,?);";
         
         try {
             cn = Conexion.getMySQL();    
@@ -21,20 +21,14 @@ public class DetalleTurnoService implements ICRUD<DetalleTurno>{
             PreparedStatement ps = cn.prepareStatement(sql);
             ps.setInt(1, entity.getIdUsuario());
             ps.setInt(2, entity.getIdTurno());
-            ps.setString(3, entity.getDia());
+            ps.setInt(3, entity.getDia());
             
             int result = ps.executeUpdate();
             
             // MOSTRAR dialogo.
-            if (result == 1){
-                dialog.showAlert(202);
-                return true;
-            } else {
-                dialog.showAlert(500);
-                return false;
-            }
+            return result == 1;
         } catch (SQLException e) {
-            dialog.showAlert(500);
+            dialog.showAlert(500, e);
         }
         
         return false;
@@ -48,7 +42,7 @@ public class DetalleTurnoService implements ICRUD<DetalleTurno>{
             PreparedStatement ps = cn.prepareStatement(sql);
             ps.setInt(1, entity.getIdUsuario());
             ps.setInt(2, entity.getIdTurno());
-            ps.setString(3, entity.getDia());
+            ps.setInt(3, entity.getDia());
             ps.setInt(4, entity.getIdDetalleTurno());
             
             int result = ps.executeUpdate();
@@ -77,7 +71,7 @@ public class DetalleTurnoService implements ICRUD<DetalleTurno>{
                     rs.getInt(1),
                     rs.getInt(2),
                     rs.getInt(3),
-                    rs.getString(4)
+                    rs.getInt(4)
                 );
             } else {
                 dialog.showAlert(500);

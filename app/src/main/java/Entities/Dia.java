@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Dia {
-    private int dia;
+    private int idDia;
     private String nombre;
 }
