@@ -1,5 +1,6 @@
 package GUI;
 
+import Services.DialogAlert;
 import Entities.Asistencia;
 import Entities.Estado;
 import Entities.Usuario;
@@ -11,13 +12,13 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
 
-public class DRegistroAsistencia extends javax.swing.JDialog {
+public class DRegistrarAsistencia extends javax.swing.JDialog {
     
     Usuario usuario;
     LocalDate fechaRegistro;
     LocalTime horaRegistro;
     
-    public DRegistroAsistencia(java.awt.Frame parent, boolean modal, int idUsuario, int tipoRegistro) {
+    public DRegistrarAsistencia(java.awt.Frame parent, boolean modal, int idUsuario, int tipoRegistro) {
         super(parent, modal);
         initComponents();
         initData(idUsuario, tipoRegistro);
@@ -198,8 +199,8 @@ public class DRegistroAsistencia extends javax.swing.JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14)
+                .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCodigoUsuario)

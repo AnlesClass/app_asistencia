@@ -2,7 +2,6 @@ package Services;
 
 import Database.Conexion;
 import Entities.Usuario;
-import GUI.DialogAlert;
 import Interfaces.ICRUD;
 import java.sql.*;
 import java.time.LocalTime;
@@ -143,6 +142,43 @@ public class UsuarioService implements ICRUD<Usuario> {
 
         return usuarios;
     }
+    
+    public List<Usuario> listarAdmins(){
+        String sql = "SELECT * FROM Usuarios u INNER JOIN Cargos c ON u.idCargo=c.idCargo WHERE c.isAdmin=1;";
+        List<Usuario> usuarios = new ArrayList<>();
+        
+        try {
+            cn = Conexion.getMySQL();
+            
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            while (rs.next()) {
+                Usuario usuario = new Usuario(
+                        rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getDate(8).toLocalDate()
+                );
+                usuarios.add(usuario);
+            }
+
+            // MOSTRAR DIALOGOS
+            if (usuarios.size() < 1) {
+                dialog.genericDialog("¡No se hallaron resultados!", 1);
+            }
+
+            return usuarios;
+        } catch (SQLException e) {
+            dialog.showAlert(500, e);
+        }
+        
+        return usuarios;
+    }
 
     public int getCode() {
         String sql = "SELECT MAX(idUsuario)+1 AS Codigo FROM Usuarios;";
@@ -203,7 +239,6 @@ public class UsuarioService implements ICRUD<Usuario> {
             PreparedStatement ps = cn.prepareStatement(sql);
             ps.setString(1, nombre + "%");
 
-            System.out.println(ps);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {

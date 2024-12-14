@@ -1,9 +1,10 @@
 package Services;
 
+import Database.Conexion;
 import Entities.Turno;
-import GUI.DialogAlert;
 import Interfaces.ICRUD;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TurnoService implements ICRUD<Turno>{
@@ -68,6 +69,35 @@ public class TurnoService implements ICRUD<Turno>{
 
     @Override
     public List<Turno> listar() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sql = "SELECT * FROM Turnos;";
+        List<Turno> turnos = new ArrayList<>();
+        
+        try {
+            cn = Conexion.getMySQL();
+            
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            
+            while(rs.next()){
+                Turno estado = new Turno(
+                    rs.getInt(1), 
+                    rs.getString(2), 
+                    rs.getTime(3).toLocalTime(),
+                    rs.getTime(4).toLocalTime()
+                );
+                turnos.add(estado);
+            }
+            
+            // MOSTRAR DIALOGOS
+            if (turnos.size() < 1){
+                dialog.genericDialog("¡No se hallaron resultados!", 1);
+            }
+            
+            return turnos;
+        } catch (SQLException e) {
+            dialog.showAlert(500, e);
+        }
+        
+        return turnos;
     }
 }

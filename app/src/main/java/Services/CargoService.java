@@ -2,7 +2,6 @@ package Services;
 
 import Database.Conexion;
 import Entities.Cargo;
-import GUI.DialogAlert;
 import Interfaces.ICRUD;
 import java.sql.*;
 import java.util.ArrayList;
@@ -26,6 +25,7 @@ public class CargoService implements ICRUD<Cargo>{
             PreparedStatement ps = cn.prepareStatement(sql);
             ps.setString(1, entity.getNombre());
             ps.setString(2, entity.getDescripcion());
+            ps.setInt(3, entity.getIsAdmin());
             
             int result = ps.executeUpdate();
             
@@ -79,7 +79,8 @@ public class CargoService implements ICRUD<Cargo>{
                 return new Cargo(
                     rs.getInt(1),
                     rs.getString(2),
-                    rs.getString(3)
+                    rs.getString(3),
+                    rs.getInt(4)
                 );
             } else {
                 dialog.showAlert(500);
@@ -106,7 +107,8 @@ public class CargoService implements ICRUD<Cargo>{
                 Cargo cargo = new Cargo(
                     rs.getInt(1), 
                     rs.getString(2), 
-                    rs.getString(3)
+                    rs.getString(3),
+                    rs.getInt(4)
                 );
                 cargos.add(cargo);
             }

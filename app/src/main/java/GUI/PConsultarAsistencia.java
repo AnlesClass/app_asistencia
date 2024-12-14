@@ -7,9 +7,12 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
-public class ConsultaAsistencia extends javax.swing.JFrame {
-
-    public ConsultaAsistencia() {
+public class PConsultarAsistencia extends javax.swing.JPanel {
+    
+    private AsistenciaService asistenciaService = new AsistenciaService();
+    private UsuarioService usuarioService = new UsuarioService();
+    
+    public PConsultarAsistencia() {
         initComponents();
     }
 
@@ -17,7 +20,6 @@ public class ConsultaAsistencia extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jSpinField1 = new com.toedter.components.JSpinField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaAsistencia = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
@@ -32,8 +34,6 @@ public class ConsultaAsistencia extends javax.swing.JFrame {
         textoAlerta = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         comboBoxEstados = new javax.swing.JComboBox<>();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         tablaAsistencia.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -52,11 +52,6 @@ public class ConsultaAsistencia extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(tablaAsistencia);
-        if (tablaAsistencia.getColumnModel().getColumnCount() > 0) {
-            tablaAsistencia.getColumnModel().getColumn(0).setResizable(false);
-            tablaAsistencia.getColumnModel().getColumn(1).setResizable(false);
-            tablaAsistencia.getColumnModel().getColumn(2).setResizable(false);
-        }
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.setForeground(new java.awt.Color(204, 204, 255));
@@ -78,13 +73,6 @@ public class ConsultaAsistencia extends javax.swing.JFrame {
             }
         });
         jScrollPane2.setViewportView(tablaInformacionUsuario);
-        if (tablaInformacionUsuario.getColumnModel().getColumnCount() > 0) {
-            tablaInformacionUsuario.getColumnModel().getColumn(0).setResizable(false);
-            tablaInformacionUsuario.getColumnModel().getColumn(0).setPreferredWidth(10);
-            tablaInformacionUsuario.getColumnModel().getColumn(1).setResizable(false);
-            tablaInformacionUsuario.getColumnModel().getColumn(2).setResizable(false);
-            tablaInformacionUsuario.getColumnModel().getColumn(3).setResizable(false);
-        }
 
         buttonBuscar.setText("Buscar");
         buttonBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -163,32 +151,27 @@ public class ConsultaAsistencia extends javax.swing.JFrame {
                 .addGap(16, 16, 16))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 17, Short.MAX_VALUE))
         );
-
-        pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private AsistenciaService asistenciaService = new AsistenciaService();
-    private UsuarioService usuarioService = new UsuarioService();
 
     private void buttonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonBuscarActionPerformed
 
@@ -198,36 +181,32 @@ public class ConsultaAsistencia extends javax.swing.JFrame {
         SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
         String fechaInicio = sdf.format(dataAsistenciaInicio.getDate()).trim();
         String fechaFinal = sdf.format(dataAsistenciaFinal.getDate()).trim();
-        
-            List<Usuario> usuarios = usuarioService.ListaPorRangoFecha(fechaInicio, fechaFinal, idEstado);
-            for (Usuario u : usuarios) {
-                Object[] fila = {u.getIdUsuario(), u.getNombre(), u.getApellido(), u.getTotalAsistencia()};
-                modelo2.addRow(fila);
-            }
 
-            // FUNCION ACCEDER AL ID DE LA TABLA, ESTO PARA MOSTRAR CADA ASISTENCIA POR UN RANGO
-            tablaInformacionUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
-                int idEstado = comboBoxEstados.getSelectedIndex();
-                Object idSeleccionado = null;
-                @Override
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    DefaultTableModel modelo = (DefaultTableModel) tablaAsistencia.getModel();
-                    modelo.setRowCount(0);
-                    int filaSeleccionada = tablaInformacionUsuario.getSelectedRow();
+        List<Usuario> usuarios = usuarioService.ListaPorRangoFecha(fechaInicio, fechaFinal, idEstado);
+        for (Usuario u : usuarios) {
+            Object[] fila = {u.getIdUsuario(), u.getNombre(), u.getApellido(), u.getTotalAsistencia()};
+            modelo2.addRow(fila);
+        }
 
-                    if (filaSeleccionada != -1) {idSeleccionado = tablaInformacionUsuario.getValueAt(filaSeleccionada, 0);}
-                    List<String[]> asistencias = asistenciaService.listarPorFecha(fechaInicio, fechaFinal, idSeleccionado, idEstado );
-                    for (String[] a : asistencias) {
-                        modelo.addRow(a);
-                    }
+        // FUNCION ACCEDER AL ID DE LA TABLA, ESTO PARA MOSTRAR CADA ASISTENCIA POR UN RANGO
+        tablaInformacionUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
+            int idEstado = comboBoxEstados.getSelectedIndex();
+            Object idSeleccionado = null;
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                DefaultTableModel modelo = (DefaultTableModel) tablaAsistencia.getModel();
+                modelo.setRowCount(0);
+                int filaSeleccionada = tablaInformacionUsuario.getSelectedRow();
+
+                if (filaSeleccionada != -1) {idSeleccionado = tablaInformacionUsuario.getValueAt(filaSeleccionada, 0);}
+                List<String[]> asistencias = asistenciaService.listarPorFecha(fechaInicio, fechaFinal, idSeleccionado, idEstado );
+                for (String[] a : asistencias) {
+                    modelo.addRow(a);
                 }
-            });
-
+            }
+        });
     }//GEN-LAST:event_buttonBuscarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonBuscar;
@@ -241,7 +220,6 @@ public class ConsultaAsistencia extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private com.toedter.components.JSpinField jSpinField1;
     private javax.swing.JTable tablaAsistencia;
     private javax.swing.JTable tablaInformacionUsuario;
     private javax.swing.JLabel textoAlerta;

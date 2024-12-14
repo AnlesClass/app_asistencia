@@ -9,9 +9,9 @@ import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Date;
 
-public class DCrearUsuario extends javax.swing.JDialog {
+public class DRegistrarUsuario extends javax.swing.JDialog {
 
-    public DCrearUsuario(java.awt.Frame parent, boolean modal) {
+    public DRegistrarUsuario(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         initData();

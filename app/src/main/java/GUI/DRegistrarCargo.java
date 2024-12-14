@@ -3,13 +3,13 @@ package GUI;
 import Entities.Cargo;
 import Services.CargoService;
 import java.awt.Color;
-import java.util.List;
 
-public class RegistrarCargo extends javax.swing.JFrame {
+public class DRegistrarCargo extends javax.swing.JFrame {
 
     CargoService cargoService = new CargoService();
+    int isAdminValue = 0;
 
-    public RegistrarCargo() {
+    public DRegistrarCargo() {
         initComponents();
     }
 
@@ -31,7 +31,7 @@ public class RegistrarCargo extends javax.swing.JFrame {
         textoAlertaDescripcion = new javax.swing.JLabel();
         textAceptacionCargo = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setBackground(new java.awt.Color(255, 204, 204));
         jLabel1.setFont(new java.awt.Font("Cascadia Code", 1, 24)); // NOI18N
@@ -44,6 +44,7 @@ public class RegistrarCargo extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel3.setText("Descripción");
 
+        opcionCorriente.setSelected(true);
         opcionCorriente.setText("Corriente");
         opcionCorriente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -52,6 +53,11 @@ public class RegistrarCargo extends javax.swing.JFrame {
         });
 
         opcionAdministrativo.setText("Administrativo");
+        opcionAdministrativo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                opcionAdministrativoActionPerformed(evt);
+            }
+        });
 
         botonRegistrarCargo.setText("Registrar Cargo");
         botonRegistrarCargo.addActionListener(new java.awt.event.ActionListener() {
@@ -147,13 +153,8 @@ public class RegistrarCargo extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void opcionCorrienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcionCorrienteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_opcionCorrienteActionPerformed
-
     private void botonCancelarRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCancelarRegistroActionPerformed
-
-    dispose();
+        dispose();
     }//GEN-LAST:event_botonCancelarRegistroActionPerformed
 
     private void botonRegistrarCargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRegistrarCargoActionPerformed
@@ -182,45 +183,22 @@ public class RegistrarCargo extends javax.swing.JFrame {
         return; 
     }
     if (esValido) {
-        Cargo cargo = new Cargo(nombre, descripcion);
+        Cargo cargo = new Cargo(nombre, descripcion, isAdminValue);
         cargoService.agregar(cargo);
         textNombreCargo.setText("");
         textoDescripcionCargo.setText("");
         }
     }//GEN-LAST:event_botonRegistrarCargoActionPerformed
 
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RegistrarCargo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RegistrarCargo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RegistrarCargo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RegistrarCargo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void opcionCorrienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcionCorrienteActionPerformed
+        isAdminValue = 0;
+        opcionAdministrativo.setSelected(false);
+    }//GEN-LAST:event_opcionCorrienteActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new RegistrarCargo().setVisible(true);
-            }
-        });
-    }
-    
+    private void opcionAdministrativoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcionAdministrativoActionPerformed
+        isAdminValue = 1;
+        opcionCorriente.setSelected(false);
+    }//GEN-LAST:event_opcionAdministrativoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonCancelarRegistro;
